@@ -4,8 +4,8 @@ import { Footer } from '@/components/footer'
 import { Mail, MapPin, Clock } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Contact Us - The Daily Chronicle',
-  description: 'Contact The Daily Chronicle. Get in touch with our team for inquiries, feedback, or support.',
+  title: 'Contact Us - globex.news',
+  description: 'Contact globex.news. Get in touch with our team for inquiries, feedback, or support.',
 }
 
 export default function ContactPage() {
@@ -29,7 +29,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground">Email</h3>
-                  <p className="text-muted-foreground">contact@dailychronicle.com</p>
+                  <p className="text-muted-foreground">contact@globex.news</p>
                 </div>
               </div>
 

@@ -3,9 +3,9 @@ import { Twitter, Facebook } from 'lucide-react'
 
 export function Footer() {
   return (
-    <footer className="bg-card border-t border-border mt-12">
+    <footer className="bg-card border-t border-border mt-8 md:mt-12">
       <div className="container mx-auto px-4 py-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between md:gap-4">
           <Link
             href="/about"
             className="text-sm font-medium text-foreground hover:text-muted-foreground transition-colors"
@@ -13,22 +13,22 @@ export function Footer() {
             ABOUT US
           </Link>
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             <Link
               href="/contact"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               CONTACT
             </Link>
             <Link
               href="/privacy-policy"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               PRIVACY
             </Link>
             <Link
               href="/terms"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               TERMS
             </Link>
@@ -61,7 +61,7 @@ export function Footer() {
             We do not host or reproduce full articles.
           </p>
           <p className="mt-2">
-            &copy; {new Date().getFullYear()} The Daily Chronicle. All rights reserved.
+            &copy; {new Date().getFullYear()} globex.news. All rights reserved.
           </p>
         </div>
       </div>

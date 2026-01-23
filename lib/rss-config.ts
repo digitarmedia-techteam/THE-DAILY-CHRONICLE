@@ -8,11 +8,6 @@ export const RSS_FEEDS: RSSFeedConfig[] = [
     category: 'world',
   },
   {
-    name: 'Reuters World',
-    url: 'https://www.reutersagency.com/feed/?best-regions=europe&post_type=best',
-    category: 'world',
-  },
-  {
     name: 'Al Jazeera',
     url: 'https://www.aljazeera.com/xml/rss/all.xml',
     category: 'world',
@@ -52,8 +47,8 @@ export const RSS_FEEDS: RSSFeedConfig[] = [
   },
   // Opinion/Editorial
   {
-    name: 'Guardian Opinion',
-    url: 'https://www.theguardian.com/commentisfree/rss',
+    name: 'BBC News',
+    url: 'https://feeds.bbci.co.uk/news/rss.xml',
     category: 'opinion',
   },
   // National/UK News

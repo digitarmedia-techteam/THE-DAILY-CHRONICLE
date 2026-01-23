@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { unstable_noStore as noStore } from 'next/cache'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { ArticleCard } from '@/components/article-card'
@@ -30,6 +31,8 @@ interface CategoryContentProps {
 }
 
 async function CategoryContent({ category }: CategoryContentProps) {
+  noStore() // Ensure fresh data on every request
+  
   const [articles, trending] = await Promise.all([
     fetchNewsByCategory(category),
     fetchTrendingNews(),
@@ -39,33 +42,35 @@ async function CategoryContent({ category }: CategoryContentProps) {
   const otherArticles = articles.slice(1)
 
   return (
-    <main className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-foreground mb-8">
+    <main className="container mx-auto px-4 py-6 md:py-8">
+      <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-6 md:mb-8">
         {CATEGORY_LABELS[category] || category}
       </h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
         {/* Main Content */}
         <div className="lg:col-span-9">
           {/* Hero Article */}
           {heroArticle && (
-            <div className="mb-8">
+            <div className="mb-6 md:mb-8">
               <ArticleCard article={heroArticle} variant="featured" />
             </div>
           )}
 
           {/* Articles Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
             {otherArticles.map((article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
           </div>
         </div>
 
-        {/* Sidebar */}
-        <aside className="lg:col-span-3 space-y-6">
-          <TrendingSidebar title="Trending Now" articles={trending.slice(0, 5)} />
-          <TrendingSidebar title="Most Read" articles={trending.slice(5, 10)} variant="numbered" />
+        {/* Sidebar - shows below on mobile */}
+        <aside className="lg:col-span-3 space-y-6 mt-6 lg:mt-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
+            <TrendingSidebar title="Trending Now" articles={trending.slice(0, 5)} />
+            <TrendingSidebar title="Most Read" articles={trending.slice(5, 10)} variant="numbered" />
+          </div>
         </aside>
       </div>
     </main>

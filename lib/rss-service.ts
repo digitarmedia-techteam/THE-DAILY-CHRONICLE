@@ -1,44 +1,12 @@
 import type { NewsArticle, NewsCategory, RSSFeedConfig } from './types'
 import { RSS_FEEDS } from './rss-config'
 
+// In-memory cache for faster subsequent loads
+const newsCache = new Map<string, { data: NewsArticle[]; timestamp: number }>()
+const CACHE_TTL = 60 * 1000 // 1 minute cache
+
 function generateId(title: string, source: string): string {
   return Buffer.from(`${title}-${source}`).toString('base64').slice(0, 16)
-}
-
-function extractImage(item: Record<string, unknown>): string | null {
-  // Try media:content
-  const mediaContent = item['media:content'] as { $?: { url?: string } } | undefined
-  if (mediaContent?.$?.url) {
-    return mediaContent.$.url
-  }
-
-  // Try media:thumbnail
-  const mediaThumbnail = item['media:thumbnail'] as { $?: { url?: string } } | undefined
-  if (mediaThumbnail?.$?.url) {
-    return mediaThumbnail.$.url
-  }
-
-  // Try enclosure
-  const enclosure = item.enclosure as { $?: { url?: string } } | { url?: string } | undefined
-  if (enclosure) {
-    if ('$' in enclosure && enclosure.$?.url) {
-      return enclosure.$.url
-    }
-    if ('url' in enclosure && enclosure.url) {
-      return enclosure.url
-    }
-  }
-
-  // Try to extract from description
-  const description = item.description as string | undefined
-  if (description) {
-    const imgMatch = description.match(/<img[^>]+src="([^">]+)"/i)
-    if (imgMatch?.[1]) {
-      return imgMatch[1]
-    }
-  }
-
-  return null
 }
 
 function stripHtml(html: string): string {
@@ -54,32 +22,41 @@ function stripHtml(html: string): string {
 }
 
 async function parseFeed(feedConfig: RSSFeedConfig): Promise<NewsArticle[]> {
+  const cacheKey = feedConfig.url
+  const cached = newsCache.get(cacheKey)
+  
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data
+  }
+
   try {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 5000) // 5 second timeout
+
     const response = await fetch(feedConfig.url, {
-      next: { revalidate: 300 }, // Cache for 5 minutes
+      next: { revalidate: 60 },
+      redirect: 'follow',
+      signal: controller.signal,
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; NewsAggregator/1.0)',
+        'User-Agent': 'Mozilla/5.0 (compatible; GlobexNews/1.0)',
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*',
       },
     })
 
+    clearTimeout(timeoutId)
+
     if (!response.ok) {
-      console.error(`Failed to fetch ${feedConfig.name}: ${response.status}`)
-      return []
+      return cached?.data || []
     }
 
     const xml = await response.text()
-    
-    // Simple XML parsing for RSS items
     const items: NewsArticle[] = []
     const itemMatches = xml.match(/<item[^>]*>[\s\S]*?<\/item>/gi) || []
 
-    for (const itemXml of itemMatches.slice(0, 20)) {
+    for (const itemXml of itemMatches.slice(0, 10)) { // Limit to 10 items per feed
       const getTagContent = (tag: string): string | null => {
-        // Handle CDATA
         const cdataMatch = itemXml.match(new RegExp(`<${tag}[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/${tag}>`, 'i'))
         if (cdataMatch) return cdataMatch[1]
-        
-        // Handle regular content
         const match = itemXml.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
         return match ? match[1] : null
       }
@@ -96,13 +73,11 @@ async function parseFeed(feedConfig: RSSFeedConfig): Promise<NewsArticle[]> {
 
       if (!title || !link) continue
 
-      // Extract image from various sources
       let image = getAttrContent('media:content', 'url') ||
                   getAttrContent('media:thumbnail', 'url') ||
                   getAttrContent('enclosure', 'url') ||
                   null
 
-      // Try to extract from description if no image found
       if (!image && description) {
         const imgMatch = description.match(/<img[^>]+src="([^">]+)"/i)
         if (imgMatch?.[1]) {
@@ -122,10 +97,32 @@ async function parseFeed(feedConfig: RSSFeedConfig): Promise<NewsArticle[]> {
       })
     }
 
+    newsCache.set(cacheKey, { data: items, timestamp: Date.now() })
     return items
   } catch (error) {
-    console.error(`Error parsing feed ${feedConfig.name}:`, error)
-    return []
+    // Return cached data if available on error
+    return cached?.data || []
+  }
+}
+
+// Optimized: Single fetch for home page data
+export async function fetchHomePageData() {
+  // Only fetch essential feeds for homepage
+  const essentialFeeds = RSS_FEEDS.filter(
+    feed => feed.category === 'home' || feed.category === 'world' || feed.category === 'business'
+  ).slice(0, 4) // Limit to 4 feeds for speed
+
+  const results = await Promise.all(essentialFeeds.map(parseFeed))
+  const allNews = results.flat().sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
+
+  return {
+    heroArticle: allNews[0] || null,
+    latestNews: allNews.slice(1, 7),
+    topStories: allNews.slice(0, 5),
+    featuredArticles: allNews.slice(7, 10),
+    trending: allNews.slice(0, 10),
+    breaking: allNews[0] ? { ...allNews[0], isBreaking: true } : null,
+    moreStories: allNews.slice(10, 16),
   }
 }
 
@@ -133,43 +130,37 @@ export async function fetchNewsByCategory(category: NewsCategory): Promise<NewsA
   const categoryFeeds = RSS_FEEDS.filter(feed => feed.category === category)
   
   if (categoryFeeds.length === 0) {
-    // If no specific category feeds, get from home
-    const homeFeeds = RSS_FEEDS.filter(feed => feed.category === 'home')
+    const homeFeeds = RSS_FEEDS.filter(feed => feed.category === 'home').slice(0, 2)
     const results = await Promise.all(homeFeeds.map(parseFeed))
     return results.flat().sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
   }
 
-  const results = await Promise.all(categoryFeeds.map(parseFeed))
+  const results = await Promise.all(categoryFeeds.slice(0, 2).map(parseFeed))
   return results.flat().sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
-}
-
-export async function fetchAllNews(): Promise<NewsArticle[]> {
-  const results = await Promise.all(RSS_FEEDS.map(parseFeed))
-  return results.flat().sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
-}
-
-export async function fetchBreakingNews(): Promise<NewsArticle | null> {
-  // Get the most recent news item as "breaking"
-  const homeFeeds = RSS_FEEDS.filter(feed => feed.category === 'home')
-  const results = await Promise.all(homeFeeds.map(parseFeed))
-  const allNews = results.flat().sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
-  
-  if (allNews.length > 0) {
-    return { ...allNews[0], isBreaking: true }
-  }
-  return null
 }
 
 export async function fetchTrendingNews(): Promise<NewsArticle[]> {
-  const allNews = await fetchAllNews()
-  // Return top 10 most recent as "trending"
-  return allNews.slice(0, 10)
-}
-
-export async function fetchTopStories(): Promise<NewsArticle[]> {
-  const homeFeeds = RSS_FEEDS.filter(feed => feed.category === 'home')
+  const homeFeeds = RSS_FEEDS.filter(feed => feed.category === 'home').slice(0, 2)
   const results = await Promise.all(homeFeeds.map(parseFeed))
   return results.flat()
     .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
-    .slice(0, 5)
+    .slice(0, 10)
+}
+
+export async function fetchAllNews(): Promise<NewsArticle[]> {
+  const feeds = RSS_FEEDS.slice(0, 4) // Limit feeds for performance
+  const results = await Promise.all(feeds.map(parseFeed))
+  return results.flat().sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
+}
+
+export async function searchNews(query: string): Promise<NewsArticle[]> {
+  const homeFeeds = RSS_FEEDS.filter(feed => feed.category === 'home').slice(0, 2)
+  const results = await Promise.all(homeFeeds.map(parseFeed))
+  const allNews = results.flat()
+
+  const searchTerms = query.toLowerCase().split(' ')
+  return allNews.filter(article => {
+    const searchText = `${article.title} ${article.description} ${article.source}`.toLowerCase()
+    return searchTerms.some(term => searchText.includes(term))
+  }).sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
 }

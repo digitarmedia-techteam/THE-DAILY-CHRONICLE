@@ -3,8 +3,8 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service - The Daily Chronicle',
-  description: 'Terms of Service for The Daily Chronicle. Read our terms and conditions for using our website.',
+  title: 'Terms of Service - globex.news',
+  description: 'Terms of Service for globex.news. Read our terms and conditions for using our website.',
 }
 
 export default function TermsPage() {
@@ -19,7 +19,7 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-foreground mb-4">1. Acceptance of Terms</h2>
             <p className="text-muted-foreground leading-relaxed">
-              By accessing and using The Daily Chronicle (&quot;the Website&quot;), you agree to be bound by 
+              By accessing and using globex.news (&quot;the Website&quot;), you agree to be bound by 
               these Terms of Service. If you do not agree to these terms, please do not use our Website.
             </p>
           </section>
@@ -27,7 +27,7 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-foreground mb-4">2. Description of Service</h2>
             <p className="text-muted-foreground leading-relaxed">
-              The Daily Chronicle is a news aggregation service that curates headlines and brief 
+              globex.news is a news aggregation service that curates headlines and brief 
               descriptions from various RSS feeds. We provide links to original news sources and 
               do not host or reproduce full articles.
             </p>
@@ -41,7 +41,7 @@ export default function TermsPage() {
               Chronicle does not claim ownership of any third-party content.
             </p>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              The Website design, layout, and original content created by The Daily Chronicle 
+              The Website design, layout, and original content created by globex.news 
               are protected by copyright and intellectual property laws.
             </p>
           </section>
@@ -82,7 +82,7 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-foreground mb-4">7. Limitation of Liability</h2>
             <p className="text-muted-foreground leading-relaxed">
-              To the fullest extent permitted by law, The Daily Chronicle shall not be liable 
+              To the fullest extent permitted by law, globex.news shall not be liable 
               for any direct, indirect, incidental, special, consequential, or punitive damages 
               arising from your use of the Website or any content obtained through it.
             </p>

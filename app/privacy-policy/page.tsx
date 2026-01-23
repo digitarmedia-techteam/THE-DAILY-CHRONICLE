@@ -3,8 +3,8 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - The Daily Chronicle',
-  description: 'Privacy Policy for The Daily Chronicle. Learn how we collect, use, and protect your information.',
+  title: 'Privacy Policy - globex.news',
+  description: 'Privacy Policy for globex.news. Learn how we collect, use, and protect your information.',
 }
 
 export default function PrivacyPolicyPage() {
@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage() {
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-foreground mb-4">Introduction</h2>
             <p className="text-muted-foreground leading-relaxed">
-              The Daily Chronicle (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) respects your privacy and is committed 
+              globex.news (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) respects your privacy and is committed 
               to protecting your personal data. This privacy policy explains how we collect, use, 
               and safeguard your information when you visit our website.
             </p>

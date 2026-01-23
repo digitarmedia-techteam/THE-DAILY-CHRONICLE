@@ -7,15 +7,15 @@ import './globals.css'
 const geist = Geist({ subsets: ['latin'] })
 const lora = Lora({ subsets: ['latin'], variable: '--font-serif' })
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dailychronicle.com'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://globex.news'
 
 export const metadata: Metadata = {
   title: {
-    default: 'The Daily Chronicle - Your Trusted News Source',
-    template: '%s | The Daily Chronicle',
+    default: 'globex.news - Your Trusted News Source',
+    template: '%s | globex.news',
   },
   description:
-    'The Daily Chronicle brings you the latest news from trusted sources worldwide. Breaking news, world affairs, business, sports, and opinion.',
+    'globex.news brings you the latest news from trusted sources worldwide. Breaking news, world affairs, business, sports, and opinion.',
   keywords: [
     'news',
     'breaking news',
@@ -26,9 +26,9 @@ export const metadata: Metadata = {
     'daily news',
     'current events',
   ],
-  authors: [{ name: 'The Daily Chronicle' }],
-  creator: 'The Daily Chronicle',
-  publisher: 'The Daily Chronicle',
+  authors: [{ name: 'globex.news' }],
+  creator: 'globex.news',
+  publisher: 'globex.news',
   metadataBase: new URL(siteUrl),
   alternates: {
     canonical: '/',
@@ -37,24 +37,24 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: siteUrl,
-    siteName: 'The Daily Chronicle',
-    title: 'The Daily Chronicle - Your Trusted News Source',
+    siteName: 'globex.news',
+    title: 'globex.news - Your Trusted News Source',
     description:
-      'The Daily Chronicle brings you the latest news from trusted sources worldwide.',
+      'globex.news brings you the latest news from trusted sources worldwide.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'The Daily Chronicle',
+        alt: 'globex.news',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'The Daily Chronicle - Your Trusted News Source',
+    title: 'globex.news - Your Trusted News Source',
     description:
-      'The Daily Chronicle brings you the latest news from trusted sources worldwide.',
+      'globex.news brings you the latest news from trusted sources worldwide.',
     images: ['/og-image.png'],
   },
   robots: {
@@ -102,15 +102,14 @@ export const viewport: Viewport = {
   userScalable: true,
 }
 
-// JSON-LD Organization Schema
 function OrganizationSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'The Daily Chronicle',
+    name: 'globex.news',
     url: siteUrl,
     logo: `${siteUrl}/logo.png`,
-    sameAs: ['https://twitter.com/dailychronicle', 'https://facebook.com/dailychronicle'],
+    sameAs: ['https://twitter.com/globexnews', 'https://facebook.com/globexnews'],
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',
@@ -126,12 +125,11 @@ function OrganizationSchema() {
   )
 }
 
-// JSON-LD WebSite Schema
 function WebSiteSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'The Daily Chronicle',
+    name: 'globex.news',
     url: siteUrl,
     potentialAction: {
       '@type': 'SearchAction',

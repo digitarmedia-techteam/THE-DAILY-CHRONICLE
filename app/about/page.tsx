@@ -3,8 +3,8 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 
 export const metadata: Metadata = {
-  title: 'About Us - The Daily Chronicle',
-  description: 'Learn about The Daily Chronicle, your trusted source for curated news from around the world.',
+  title: 'About Us - globex.news',
+  description: 'Learn about globex.news, your trusted source for curated news from around the world.',
 }
 
 export default function AboutPage() {
@@ -13,12 +13,12 @@ export default function AboutPage() {
       <Header />
       <main className="container mx-auto px-4 py-12">
         <article className="max-w-3xl mx-auto prose prose-lg dark:prose-invert">
-          <h1 className="text-3xl font-bold text-foreground mb-8">About The Daily Chronicle</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-8">About globex.news</h1>
           
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-foreground mb-4">Our Mission</h2>
             <p className="text-muted-foreground leading-relaxed">
-              The Daily Chronicle is a news aggregation platform dedicated to bringing you the latest 
+              globex.news is a news aggregation platform dedicated to bringing you the latest 
               headlines from trusted sources around the world. We believe in the importance of staying 
               informed and making it easy for readers to access quality journalism.
             </p>
@@ -57,7 +57,7 @@ export default function AboutPage() {
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-foreground mb-4">Editorial Independence</h2>
             <p className="text-muted-foreground leading-relaxed">
-              The Daily Chronicle does not create original news content. We serve as a discovery 
+              globex.news does not create original news content. We serve as a discovery 
               platform to help readers find stories from established news organizations. The views 
               and opinions expressed in the articles belong to their respective publishers.
             </p>
