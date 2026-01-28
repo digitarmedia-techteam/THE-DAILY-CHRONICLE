@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: globex-app
+    ports:
+      - "3006:3006"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
