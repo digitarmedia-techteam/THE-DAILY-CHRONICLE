@@ -10,4 +10,5 @@ services:
       - "3006:3006"
     environment:
       - NODE_ENV=production
+      - PORT=3006
     restart: unless-stopped

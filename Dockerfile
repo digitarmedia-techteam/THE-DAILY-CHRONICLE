@@ -33,8 +33,11 @@ RUN pnpm install --frozen-lockfile --prod
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 
+# Set port environment variable
+ENV PORT=3006
+
 # Expose port 3006
 EXPOSE 3006
 
-# Start the application
-CMD ["pnpm", "start"]
+# Start the application on port 3006
+CMD ["pnpm", "start", "-p", "3006"]
