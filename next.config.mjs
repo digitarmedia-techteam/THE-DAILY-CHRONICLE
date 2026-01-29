@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Standalone output is preferred for Docker but can fail on Windows/pnpm due to path lengths
-  // output: 'standalone',
+  output: 'standalone',
 
   // Images configuration
   images: {
