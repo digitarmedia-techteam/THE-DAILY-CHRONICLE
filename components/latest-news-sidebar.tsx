@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { MediaRenderer } from '@/components/article-card'
 import type { NewsArticle } from '@/lib/types'
 import { formatDistanceToNow } from '@/lib/date-utils'
 
@@ -13,7 +13,7 @@ export function LatestNewsSidebar({ articles }: LatestNewsSidebarProps) {
         Latest News
       </h3>
       <div className="space-y-4">
-        {articles.slice(0, 6).map((article) => (
+        {articles.slice(0, 30).map((article) => (
           <a
             key={article.id}
             href={article.link}
@@ -21,17 +21,15 @@ export function LatestNewsSidebar({ articles }: LatestNewsSidebarProps) {
             rel="nofollow noopener sponsored"
             className="flex gap-3 group pb-4 border-b border-border last:border-0"
           >
-            {article.image && (
-              <div className="relative w-16 h-16 flex-shrink-0 overflow-hidden rounded">
-                <Image
-                  src={article.image || "/placeholder.svg"}
-                  alt={article.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  sizes="64px"
-                />
-              </div>
-            )}
+            <div className="w-16 h-16 flex-shrink-0">
+              <MediaRenderer
+                image={article.image}
+                video={article.video}
+                title={article.title}
+                aspectRatio="aspect-square"
+                className="rounded duration-300"
+              />
+            </div>
             <div className="flex-1 min-w-0">
               <h4 className="text-sm font-medium text-foreground group-hover:text-[#1a2744] dark:group-hover:text-white/80 line-clamp-2 leading-snug transition-colors">
                 {article.title}

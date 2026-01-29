@@ -1,15 +1,16 @@
 import type { RSSFeedConfig } from './types'
 
 export const RSS_FEEDS: RSSFeedConfig[] = [
+  // General / Home
+  {
+    name: 'BBC Top Stories',
+    url: 'https://feeds.bbci.co.uk/news/rss.xml',
+    category: 'home',
+  },
   // World News
   {
     name: 'BBC World',
     url: 'https://feeds.bbci.co.uk/news/world/rss.xml',
-    category: 'world',
-  },
-  {
-    name: 'Al Jazeera',
-    url: 'https://www.aljazeera.com/xml/rss/all.xml',
     category: 'world',
   },
   // Business News
@@ -18,55 +19,53 @@ export const RSS_FEEDS: RSSFeedConfig[] = [
     url: 'https://feeds.bbci.co.uk/news/business/rss.xml',
     category: 'business',
   },
-  {
-    name: 'CNBC',
-    url: 'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10001147',
-    category: 'business',
-  },
   // Technology
   {
     name: 'BBC Technology',
     url: 'https://feeds.bbci.co.uk/news/technology/rss.xml',
     category: 'technology',
   },
+  // Politics
   {
-    name: 'TechCrunch',
-    url: 'https://techcrunch.com/feed/',
-    category: 'technology',
-  },
-  // Sports
-  {
-    name: 'BBC Sport',
-    url: 'https://feeds.bbci.co.uk/sport/rss.xml',
-    category: 'sports',
-  },
-  {
-    name: 'ESPN',
-    url: 'https://www.espn.com/espn/rss/news',
-    category: 'sports',
-  },
-  // Opinion/Editorial
-  {
-    name: 'BBC News',
-    url: 'https://feeds.bbci.co.uk/news/rss.xml',
+    name: 'BBC Politics',
+    url: 'https://feeds.bbci.co.uk/news/politics/rss.xml',
     category: 'opinion',
   },
-  // National/UK News
+  // National (UK)
   {
     name: 'BBC UK',
     url: 'https://feeds.bbci.co.uk/news/uk/rss.xml',
     category: 'national',
   },
-  // General/Home
+  // Science & Environment (Secondary World source)
   {
-    name: 'BBC Top Stories',
-    url: 'https://feeds.bbci.co.uk/news/rss.xml',
+    name: 'BBC Science',
+    url: 'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml',
+    category: 'world',
+  },
+  // Entertainment
+  {
+    name: 'BBC Entertainment',
+    url: 'https://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml',
     category: 'home',
   },
+  // USA News
   {
-    name: 'NPR News',
-    url: 'https://feeds.npr.org/1001/rss.xml',
-    category: 'home',
+    name: 'BBC USA & Canada',
+    url: 'https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml',
+    category: 'usa',
+  },
+  // China News
+  {
+    name: 'BBC China',
+    url: 'https://feeds.bbci.co.uk/news/world/asia/china/rss.xml',
+    category: 'china',
+  },
+  // India News
+  {
+    name: 'BBC India',
+    url: 'https://feeds.bbci.co.uk/news/world/asia/india/rss.xml',
+    category: 'india',
   },
 ]
 
@@ -75,18 +74,22 @@ export const CATEGORY_LABELS: Record<string, string> = {
   world: 'World',
   national: 'National',
   business: 'Business',
-  opinion: 'Opinion',
+  opinion: 'Politics',
   sports: 'Sports',
   technology: 'Technology',
-  culture: 'Culture',
-  innovation: 'Innovation',
+  usa: 'USA & Canada',
+  china: 'China News',
+  india: 'India News',
 }
 
 export const NAV_CATEGORIES = [
   { slug: '', label: 'Home' },
   { slug: 'world', label: 'World' },
-  { slug: 'national', label: 'National' },
+  { slug: 'national', label: 'UK News' },
   { slug: 'business', label: 'Business' },
-  { slug: 'opinion', label: 'Opinion' },
-  { slug: 'sports', label: 'Sports' },
+  { slug: 'technology', label: 'Tech' },
+  { slug: 'opinion', label: 'Politics' },
+  { slug: 'usa', label: 'USA' },
+  { slug: 'china', label: 'China' },
+  { slug: 'india', label: 'India' },
 ]

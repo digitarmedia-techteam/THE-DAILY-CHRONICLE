@@ -13,7 +13,7 @@ export function TopStories({ articles }: TopStoriesProps) {
         Top Stories
       </h3>
       <div className="space-y-3">
-        {articles.slice(0, 4).map((article) => (
+        {articles.slice(0, 20).map((article) => (
           <a
             key={article.id}
             href={article.link}

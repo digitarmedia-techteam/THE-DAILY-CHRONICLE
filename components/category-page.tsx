@@ -30,9 +30,9 @@ interface CategoryContentProps {
   category: NewsCategory
 }
 
-async function CategoryContent({ category }: CategoryContentProps) {
+export async function CategoryContent({ category }: CategoryContentProps) {
   noStore() // Ensure fresh data on every request
-  
+
   const [articles, trending] = await Promise.all([
     fetchNewsByCategory(category),
     fetchTrendingNews(),
@@ -42,23 +42,29 @@ async function CategoryContent({ category }: CategoryContentProps) {
   const otherArticles = articles.slice(1)
 
   return (
-    <main className="container mx-auto px-4 py-6 md:py-8">
-      <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-6 md:mb-8">
-        {CATEGORY_LABELS[category] || category}
-      </h1>
+    <main className="container max-w-[1600px] mx-auto px-4 py-6 md:py-8">
+      <div className="flex items-center gap-2 mb-8">
+        <span className="w-1.5 h-8 bg-[#1a2744] dark:bg-blue-500 rounded-full" />
+        <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter">
+          {CATEGORY_LABELS[category] || category}
+        </h1>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* Main Content */}
-        <div className="lg:col-span-9">
+        <div className="lg:col-span-9 space-y-10">
           {/* Hero Article */}
           {heroArticle && (
             <div className="mb-6 md:mb-8">
               <ArticleCard article={heroArticle} variant="featured" />
+              <p className="text-lg text-muted-foreground mt-4 leading-relaxed line-clamp-3">
+                {heroArticle.description}
+              </p>
             </div>
           )}
 
           {/* Articles Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {otherArticles.map((article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
@@ -66,10 +72,10 @@ async function CategoryContent({ category }: CategoryContentProps) {
         </div>
 
         {/* Sidebar - shows below on mobile */}
-        <aside className="lg:col-span-3 space-y-6 mt-6 lg:mt-0">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
-            <TrendingSidebar title="Trending Now" articles={trending.slice(0, 5)} />
-            <TrendingSidebar title="Most Read" articles={trending.slice(5, 10)} variant="numbered" />
+        <aside className="lg:col-span-3 mt-6 lg:mt-0">
+          <div className="sticky top-24 space-y-8 max-h-[calc(100vh-120px)] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-border">
+            <TrendingSidebar title="Trending in Section" articles={trending.slice(0, 10)} />
+            <TrendingSidebar title="Global Top News" articles={trending.slice(10, 20)} variant="numbered" />
           </div>
         </aside>
       </div>
@@ -86,6 +92,7 @@ export function CategoryPage({ category }: CategoryPageProps) {
     <div className="min-h-screen bg-background">
       <Header />
       <Suspense fallback={<div className="container mx-auto px-4 py-8"><LoadingSkeleton /></div>}>
+        {/* @ts-ignore */}
         <CategoryContent category={category} />
       </Suspense>
       <Footer />

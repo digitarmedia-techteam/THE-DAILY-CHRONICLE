@@ -9,9 +9,17 @@ export async function GET(request: Request) {
   const category = searchParams.get('category') as NewsCategory | null
 
   try {
-    const articles = category
-      ? await fetchNewsByCategory(category)
-      : await fetchAllNews()
+    let articles = []
+    if (category === 'trending') {
+      const { fetchTrendingNews } = await import('@/lib/rss-service')
+      articles = await fetchTrendingNews()
+    } else if (category) {
+      const { fetchNewsByCategory } = await import('@/lib/rss-service')
+      articles = await fetchNewsByCategory(category)
+    } else {
+      const { fetchAllNews } = await import('@/lib/rss-service')
+      articles = await fetchAllNews()
+    }
 
     return NextResponse.json({
       success: true,

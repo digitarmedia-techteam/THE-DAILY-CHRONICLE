@@ -17,7 +17,7 @@ export function TrendingSidebar({ title, articles, variant = 'default' }: Trendi
           {title}
         </h3>
         <div className="space-y-4">
-          {articles.slice(0, 5).map((article, index) => (
+          {articles.slice(0, 30).map((article, index) => (
             <a
               key={article.id}
               href={article.link}
@@ -49,7 +49,7 @@ export function TrendingSidebar({ title, articles, variant = 'default' }: Trendi
         {title}
       </h3>
       <div className="space-y-4">
-        {articles.slice(0, 5).map((article) => (
+        {articles.slice(0, 30).map((article) => (
           <a
             key={article.id}
             href={article.link}

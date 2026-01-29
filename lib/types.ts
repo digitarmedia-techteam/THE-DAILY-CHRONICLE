@@ -4,13 +4,14 @@ export interface NewsArticle {
   description: string
   link: string
   image: string | null
+  video?: string | null
   source: string
   publishedAt: Date
   category: NewsCategory
   isBreaking?: boolean
 }
 
-export type NewsCategory = 
+export type NewsCategory =
   | 'home'
   | 'world'
   | 'national'
@@ -20,6 +21,10 @@ export type NewsCategory =
   | 'technology'
   | 'culture'
   | 'innovation'
+  | 'trending'
+  | 'usa'
+  | 'china'
+  | 'india'
 
 export interface RSSFeedConfig {
   name: string
@@ -35,13 +40,20 @@ export interface RSSItem {
   pubDate?: string
   enclosure?: {
     url?: string
+    type?: string
   }
   'media:content'?: {
     $?: {
       url?: string
+      type?: string
     }
   }
   'media:thumbnail'?: {
+    $?: {
+      url?: string
+    }
+  }
+  'media:video'?: {
     $?: {
       url?: string
     }

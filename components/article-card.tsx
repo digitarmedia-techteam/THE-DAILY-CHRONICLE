@@ -9,6 +9,65 @@ interface ArticleCardProps {
   showCategory?: boolean
 }
 
+// Helper to render media (image or video fallback)
+export function MediaRenderer({
+  image,
+  video,
+  title,
+  className = '',
+  aspectRatio = 'aspect-video'
+}: {
+  image: string | null | undefined
+  video: string | null | undefined
+  title: string
+  className?: string
+  aspectRatio?: string
+}) {
+  // if image is missing but video is present, we show video
+  // if both missing, we might show a placeholder or nothing
+
+  if (image) {
+    return (
+      <div className={`relative w-full h-full overflow-hidden ${aspectRatio}`}>
+        <Image
+          src={image}
+          alt={title}
+          fill
+          unoptimized // Better for external RSS images
+          className={`object-cover group-hover:scale-105 transition-transform duration-500 ${className}`}
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
+      </div>
+    )
+  }
+
+  if (video) {
+    return (
+      <div className={`relative w-full h-full overflow-hidden ${aspectRatio} bg-black`}>
+        <video
+          src={video}
+          className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${className}`}
+          preload="metadata"
+          muted
+          playsInline
+        />
+        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
+          <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40 shadow-lg">
+            <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[12px] border-l-white border-b-[8px] border-b-transparent ml-1" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className={`relative w-full h-full ${aspectRatio} bg-muted group-hover:bg-muted/80 transition-colors flex items-center justify-center overflow-hidden`}>
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1a2744]/5 to-transparent opacity-20" />
+      <img src="/icon.svg" alt="" className="w-12 h-12 opacity-10 filter grayscale group-hover:scale-110 transition-transform duration-700" />
+    </div>
+  )
+}
+
 export function ArticleCard({
   article,
   variant = 'default',
@@ -25,14 +84,14 @@ export function ArticleCard({
         rel="nofollow noopener sponsored"
         className="flex gap-3 group"
       >
-        {showImage && article.image && (
-          <div className="relative w-16 h-16 flex-shrink-0 overflow-hidden rounded">
-            <Image
-              src={article.image || "/placeholder.svg"}
-              alt={article.title}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-              sizes="64px"
+        {showImage && (
+          <div className="w-16 h-16 flex-shrink-0">
+            <MediaRenderer
+              image={article.image}
+              video={article.video}
+              title={article.title}
+              aspectRatio="aspect-square"
+              className="rounded duration-300"
             />
           </div>
         )}
@@ -56,14 +115,14 @@ export function ArticleCard({
         rel="nofollow noopener sponsored"
         className="flex gap-4 p-4 bg-card rounded-lg border border-border hover:shadow-md transition-shadow group"
       >
-        {showImage && article.image && (
-          <div className="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded">
-            <Image
-              src={article.image || "/placeholder.svg"}
-              alt={article.title}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-              sizes="96px"
+        {showImage && (
+          <div className="w-24 h-24 flex-shrink-0">
+            <MediaRenderer
+              image={article.image}
+              video={article.video}
+              title={article.title}
+              aspectRatio="aspect-square"
+              className="rounded duration-300"
             />
           </div>
         )}
@@ -90,20 +149,15 @@ export function ArticleCard({
         rel="nofollow noopener sponsored"
         className="block group relative overflow-hidden rounded-lg"
       >
-        <div className="relative aspect-[16/10] w-full">
-          {article.image ? (
-            <Image
-              src={article.image || "/placeholder.svg"}
-              alt={article.title}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority
-            />
-          ) : (
-            <div className="w-full h-full bg-muted" />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+        <div className="relative w-full">
+          <MediaRenderer
+            image={article.image}
+            video={article.video}
+            title={article.title}
+            aspectRatio="aspect-[16/10]"
+            className="duration-500"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 p-6">
           {showCategory && (
@@ -131,14 +185,14 @@ export function ArticleCard({
       rel="nofollow noopener sponsored"
       className="block group"
     >
-      {showImage && article.image && (
-        <div className="relative aspect-video w-full overflow-hidden rounded-lg mb-3">
-          <Image
-            src={article.image || "/placeholder.svg"}
-            alt={article.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            sizes="(max-width: 768px) 100vw, 33vw"
+      {showImage && (
+        <div className="mb-3">
+          <MediaRenderer
+            image={article.image}
+            video={article.video}
+            title={article.title}
+            aspectRatio="aspect-video"
+            className="rounded-lg duration-300"
           />
         </div>
       )}

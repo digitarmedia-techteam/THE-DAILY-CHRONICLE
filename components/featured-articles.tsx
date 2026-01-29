@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { MediaRenderer } from '@/components/article-card'
 import type { NewsArticle } from '@/lib/types'
 import { formatDistanceToNow } from '@/lib/date-utils'
 import { CATEGORY_LABELS } from '@/lib/rss-config'
@@ -8,7 +8,7 @@ interface FeaturedArticlesProps {
 }
 
 export function FeaturedArticles({ articles }: FeaturedArticlesProps) {
-  const featured = articles.slice(0, 3)
+  const featured = articles.slice(0, 15)
 
   return (
     <div>
@@ -24,20 +24,14 @@ export function FeaturedArticles({ articles }: FeaturedArticlesProps) {
             rel="nofollow noopener sponsored"
             className="group"
           >
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg mb-3">
-              {article.image ? (
-                <Image
-                  src={article.image || "/placeholder.svg"}
-                  alt={article.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              ) : (
-                <div className="w-full h-full bg-muted flex items-center justify-center">
-                  <span className="text-muted-foreground text-sm">No image</span>
-                </div>
-              )}
+            <div className="mb-3">
+              <MediaRenderer
+                image={article.image}
+                video={article.video}
+                title={article.title}
+                aspectRatio="aspect-[4/3]"
+                className="rounded-lg duration-300"
+              />
             </div>
             <span className="inline-block text-xs font-semibold uppercase text-[#c9a227] mb-1">
               {CATEGORY_LABELS[article.category] || article.category}

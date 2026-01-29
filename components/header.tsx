@@ -4,28 +4,24 @@ import React from "react"
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Search, Moon, Sun, Menu, X } from 'lucide-react'
+import { Search, Moon, Sun, Menu, X, ChevronRight } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { NAV_CATEGORIES } from '@/lib/rss-config'
 import { cn } from '@/lib/utils'
+import { useTheme } from 'next-themes'
 
 export function Header() {
   const pathname = usePathname()
   const router = useRouter()
-  const [isDark, setIsDark] = useState(false)
+  const { theme, setTheme, resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const searchInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme')
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const shouldBeDark = saved === 'dark' || (!saved && prefersDark)
-    setIsDark(shouldBeDark)
-    if (shouldBeDark) {
-      document.documentElement.classList.add('dark')
-    }
+    setMounted(true)
   }, [])
 
   useEffect(() => {
@@ -41,16 +37,11 @@ export function Header() {
   }, [pathname])
 
   const toggleTheme = () => {
-    const newValue = !isDark
-    setIsDark(newValue)
-    if (newValue) {
-      document.documentElement.classList.add('dark')
-      localStorage.setItem('theme', 'dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-      localStorage.setItem('theme', 'light')
-    }
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
   }
+
+  // Prevent hydration mismatch
+  const isDark = mounted && resolvedTheme === 'dark'
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -64,37 +55,40 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-[#1a2744] text-white">
       {/* Top bar with logo */}
-      <div className="border-b border-white/10">
-        <div className="container mx-auto px-4 py-3 md:py-4">
-          <div className="flex items-center justify-between gap-4">
-            <Link href="/" className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight flex-shrink-0">
+      <div className="border-b border-white/10 bg-[#1a2744] relative z-50">
+        <div className="container max-w-[1600px] mx-auto px-4 py-3 md:py-6 flex items-center justify-between gap-4 md:gap-8">
+          <Link href="/" className="flex items-center gap-2 text-xl sm:text-2xl md:text-3xl font-bold tracking-tight flex-shrink-0">
+            <img src="/icon.svg" alt="Globex News Logo" className="w-8 h-8 md:w-10 md:h-10" />
+            <div>
               <span className="text-white">globex</span>
               <span className="text-blue-400">.news</span>
-            </Link>
-            <div className="flex items-center gap-2 sm:gap-4">
-              <span className="hidden lg:inline text-sm text-white/80">
-                {isDark ? 'DARK MODE' : 'LIGHT MODE'}
-              </span>
-              <button
-                onClick={() => setSearchOpen(!searchOpen)}
-                className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                aria-label={searchOpen ? 'Close search' : 'Open search'}
-              >
-                {searchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
-              </button>
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 hover:bg-white/10 rounded-full transition-colors"
-                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-              >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
             </div>
+          </Link>
+          <div className="flex items-center gap-3 md:gap-4">
+            <span className="hidden lg:inline text-xs font-bold text-white/50 tracking-widest">
+              LATEST UPDATES • BBC NETWORK
+            </span>
+            <button
+              onClick={() => setSearchOpen(!searchOpen)}
+              className="p-2 hover:bg-white/10 rounded-full transition-colors"
+              aria-label={searchOpen ? 'Close search' : 'Open search'}
+            >
+              {searchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
+            </button>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 hover:bg-white/10 rounded-full transition-colors"
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
+        </div>
 
-          {/* Search bar (expandable) */}
-          {searchOpen && (
-            <form onSubmit={handleSearch} className="mt-3 md:mt-4">
+        {/* Search bar (expandable) */}
+        {searchOpen && (
+          <div className="container max-w-[1600px] mx-auto px-4 pb-4">
+            <form onSubmit={handleSearch}>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
                 <input
@@ -113,13 +107,13 @@ export function Header() {
                 </button>
               </div>
             </form>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Navigation */}
-      <nav className="bg-[#1a2744]">
-        <div className="container mx-auto px-4">
+      <nav className="bg-[#1a2744] shadow-lg">
+        <div className="container max-w-[1600px] mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Desktop nav */}
             <ul className="hidden lg:flex items-center gap-0.5 overflow-x-auto">
@@ -131,7 +125,7 @@ export function Header() {
                     <Link
                       href={href}
                       className={cn(
-                        'block px-3 xl:px-4 py-3 text-xs xl:text-sm font-medium uppercase tracking-wide transition-colors whitespace-nowrap',
+                        'block px-3 xl:px-4 py-3 text-xs xl:text-sm font-bold uppercase tracking-wide transition-colors whitespace-nowrap',
                         isActive
                           ? 'bg-white/10 text-white'
                           : 'text-white/80 hover:bg-white/5 hover:text-white'
@@ -144,20 +138,20 @@ export function Header() {
               })}
             </ul>
 
-            {/* Tablet nav (horizontal scroll) */}
-            <ul className="hidden md:flex lg:hidden items-center gap-0.5 overflow-x-auto scrollbar-hide -mx-4 px-4">
+            {/* Mobile/Tablet Category Scroller - Horizontal scroll for better UX */}
+            <ul className="flex lg:hidden items-center gap-1 overflow-x-auto scrollbar-hide py-1 -mx-4 px-4 mask-fade-edges">
               {NAV_CATEGORIES.map((cat) => {
                 const href = cat.slug ? `/${cat.slug}` : '/'
                 const isActive = pathname === href || (cat.slug === '' && pathname === '/')
                 return (
-                  <li key={cat.slug || 'home'}>
+                  <li key={cat.slug || 'home'} className="flex-shrink-0">
                     <Link
                       href={href}
                       className={cn(
-                        'block px-3 py-3 text-xs font-medium uppercase tracking-wide transition-colors whitespace-nowrap',
+                        'block px-4 py-2 text-[11px] font-black uppercase tracking-widest transition-all rounded-full',
                         isActive
-                          ? 'bg-white/10 text-white'
-                          : 'text-white/80 hover:bg-white/5 hover:text-white'
+                          ? 'bg-white text-[#1a2744] shadow-sm'
+                          : 'text-white/80 hover:bg-white/10'
                       )}
                     >
                       {cat.label}
@@ -180,40 +174,60 @@ export function Header() {
             </div>
           </div>
 
-          {/* Mobile nav */}
+          {/* Full Screen Mobile Menu Overlay */}
           {mobileMenuOpen && (
-            <div className="md:hidden py-4 border-t border-white/10">
-              <ul className="space-y-1">
-                {NAV_CATEGORIES.map((cat) => {
-                  const href = cat.slug ? `/${cat.slug}` : '/'
-                  const isActive = pathname === href || (cat.slug === '' && pathname === '/')
-                  return (
-                    <li key={cat.slug || 'home'}>
-                      <Link
-                        href={href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={cn(
-                          'block px-4 py-3 text-sm font-medium uppercase tracking-wide transition-colors rounded-lg',
-                          isActive
-                            ? 'bg-white/10 text-white'
-                            : 'text-white/80 hover:bg-white/5 hover:text-white'
-                        )}
-                      >
-                        {cat.label}
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
-              <div className="mt-4 px-4 pt-4 border-t border-white/10">
+            <div className="md:hidden fixed inset-0 z-50 bg-[#1a2744] animate-in slide-in-from-right duration-300 flex flex-col pt-16">
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="absolute top-4 right-4 p-2 text-white bg-white/10 rounded-full"
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              <div className="flex-1 overflow-y-auto px-6 py-8">
+                <p className="text-white/40 text-[10px] uppercase font-black tracking-[0.2em] mb-8">Sections</p>
+                <ul className="space-y-4">
+                  {NAV_CATEGORIES.map((cat) => {
+                    const href = cat.slug ? `/${cat.slug}` : '/'
+                    const isActive = pathname === href || (cat.slug === '' && pathname === '/')
+                    return (
+                      <li key={cat.slug || 'home'}>
+                        <Link
+                          href={href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={cn(
+                            'flex justify-between items-center p-5 rounded-2xl border transition-all text-xl font-black',
+                            isActive
+                              ? 'bg-white text-[#1a2744] border-white'
+                              : 'text-white/90 border-white/10 hover:bg-white/5'
+                          )}
+                        >
+                          {cat.label}
+                          <ChevronRight className={cn("w-5 h-5", isActive ? "text-[#1a2744]" : "text-white/30")} />
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+
+              <div className="p-8 border-t border-white/10 bg-black/10">
                 <button
-                  onClick={toggleTheme}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors w-full justify-center"
-                  aria-label="Toggle theme"
+                  onClick={() => {
+                    toggleTheme()
+                    setMobileMenuOpen(false)
+                  }}
+                  className="w-full flex items-center justify-between p-5 rounded-2xl bg-white/5 border border-white/5 text-white active:scale-95 transition-all"
                 >
-                  {isDark ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-                  <span className="text-sm">{isDark ? 'Dark Mode' : 'Light Mode'}</span>
+                  <div className="flex items-center gap-3">
+                    {isDark ? <Moon className="w-5 h-5 text-blue-400" /> : <Sun className="w-5 h-5 text-yellow-400" />}
+                    <span className="font-bold">Display Mode</span>
+                  </div>
+                  <span className="text-xs font-bold opacity-40 uppercase tracking-widest">{isDark ? 'Dark' : 'Light'}</span>
                 </button>
+                <p className="mt-8 text-center text-white/20 text-[10px] uppercase font-bold tracking-widest">
+                  © 2026 Globex BBC Network
+                </p>
               </div>
             </div>
           )}
