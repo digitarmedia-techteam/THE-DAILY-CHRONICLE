@@ -3,6 +3,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 
+// Extend Window interface to include adsbygoogle property
+declare global {
+    interface Window {
+        adsbygoogle: any[]
+    }
+}
+
 interface AdPlacementProps {
     slot: string
     format?: 'auto' | 'fluid' | 'rectangle' | 'vertical' | 'horizontal'
