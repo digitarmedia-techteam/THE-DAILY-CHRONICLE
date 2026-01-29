@@ -1,13 +1,12 @@
 import { Suspense } from 'react'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { MarketTicker } from '@/components/market-ticker'
-import { BreakingNewsBanner } from '@/components/breaking-news-banner'
 import { ArticleCard } from '@/components/article-card'
 import { LatestNewsSidebar } from '@/components/latest-news-sidebar'
 import { TopStories } from '@/components/top-stories'
 import { TrendingSidebar } from '@/components/trending-sidebar'
 import { FeaturedArticles } from '@/components/featured-articles'
+import { AdPlacement } from '@/components/ad-placement'
 import { fetchHomePageData } from '@/lib/rss-service'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -60,7 +59,6 @@ async function HomeContent() {
     topStories,
     featuredArticles,
     trending,
-    breaking,
     moreStories,
   } = data
 
@@ -69,8 +67,6 @@ async function HomeContent() {
 
   return (
     <>
-      {/* Search and Navigation are handled in Header */}
-
       <main className="container max-w-[1600px] mx-auto px-4 py-6 md:py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 lg:gap-10">
           {/* LEFT SIDEBAR: Latest News (Sticky) */}
@@ -90,10 +86,12 @@ async function HomeContent() {
                   showCategory
                 />
               )}
-              <p className="text-base text-muted-foreground mt-4 leading-relaxed">
+              <p className="text-base text-muted-foreground mt-4 leading-relaxed font-medium">
                 {heroArticle?.description}
               </p>
             </section>
+
+            <AdPlacement slot="home-hero-bottom" className="my-6" />
 
             {/* Injected Content to fill middle space */}
             <section className="pt-8 border-t border-border">
@@ -113,6 +111,7 @@ async function HomeContent() {
           <div className="lg:hidden md:col-span-1 order-2 space-y-8">
             <div className="md:hidden">
               <LatestNewsSidebar articles={latestNews.slice(0, 5)} />
+              <AdPlacement slot="mobile-infeed-1" label="Promoted" className="my-6" />
             </div>
             <TopStories articles={topStories.slice(0, 8)} />
           </div>
@@ -121,6 +120,7 @@ async function HomeContent() {
           <aside className="hidden lg:block lg:col-span-3 order-3">
             <div className="sticky top-24 space-y-8 max-h-[calc(100vh-120px)] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-border">
               <TopStories articles={topStories} />
+              <AdPlacement slot="sidebar-top" label="Sponsored" />
               <TrendingSidebar title="Politics & UK" articles={trendingOpinion} />
               <TrendingSidebar title="Trending Now" articles={trendingNow} variant="numbered" />
             </div>
@@ -135,6 +135,8 @@ async function HomeContent() {
           </div>
           <FeaturedArticles articles={featuredArticles} />
         </section>
+
+        <AdPlacement slot="home-middle" className="my-12 px-4 border-y border-border/50 py-4" />
 
         <section className="mt-12 pt-8 border-t border-border">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -161,15 +163,12 @@ async function HomeContent() {
   )
 }
 
-
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       <Header />
-      <MarketTicker />
-      <BreakingNewsBanner />
       <Suspense fallback={<LoadingSkeleton />}>
-        {/* @ts-ignore Component might be a promise in this React version */}
+        {/* @ts-ignore */}
         <HomeContent />
       </Suspense>
       <Footer />

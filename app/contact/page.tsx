@@ -15,9 +15,9 @@ export default function ContactPage() {
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold text-foreground mb-8">Contact Us</h1>
-          
+
           <p className="text-muted-foreground leading-relaxed mb-8">
-            Have a question, feedback, or concern? We&apos;d love to hear from you. Please use 
+            Have a question, feedback, or concern? We&apos;d love to hear from you. Please use
             the contact information below or fill out our contact form.
           </p>
 
@@ -40,8 +40,8 @@ export default function ContactPage() {
                 <div>
                   <h3 className="font-semibold text-foreground">Address</h3>
                   <p className="text-muted-foreground">
-                    123 News Street<br />
-                    Media City, MC 12345<br />
+                    30 N Gould St Ste R<br />
+                    Sheridan, WY 82801<br />
                     United States
                   </p>
                 </div>
@@ -141,7 +141,7 @@ export default function ContactPage() {
               <div>
                 <h3 className="font-medium text-foreground">How do I report incorrect content?</h3>
                 <p className="text-muted-foreground text-sm mt-1">
-                  Please use the contact form above and select &quot;Content Concern&quot; as the subject. 
+                  Please use the contact form above and select &quot;Content Concern&quot; as the subject.
                   Include the article title and describe the issue.
                 </p>
               </div>
@@ -154,7 +154,7 @@ export default function ContactPage() {
               <div>
                 <h3 className="font-medium text-foreground">How do you select news sources?</h3>
                 <p className="text-muted-foreground text-sm mt-1">
-                  We aggregate content from reputable, established news organizations with publicly 
+                  We aggregate content from reputable, established news organizations with publicly
                   available RSS feeds. Visit our About page for more details.
                 </p>
               </div>

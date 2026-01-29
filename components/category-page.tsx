@@ -4,6 +4,7 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { ArticleCard } from '@/components/article-card'
 import { TrendingSidebar } from '@/components/trending-sidebar'
+import { AdPlacement } from '@/components/ad-placement'
 import { fetchNewsByCategory, fetchTrendingNews } from '@/lib/rss-service'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { NewsCategory } from '@/lib/types'
@@ -63,12 +64,16 @@ export async function CategoryContent({ category }: CategoryContentProps) {
             </div>
           )}
 
+          <AdPlacement slot="category-hero-bottom" className="mb-10" />
+
           {/* Articles Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {otherArticles.map((article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
           </div>
+
+          <AdPlacement slot="category-mobile-footer" label="Recommended" className="lg:hidden mt-8 mb-4" />
         </div>
 
         {/* Sidebar - shows below on mobile */}

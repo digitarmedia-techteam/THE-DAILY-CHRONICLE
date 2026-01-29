@@ -19,11 +19,12 @@ export function TopStories({ articles }: TopStoriesProps) {
             href={article.link}
             target="_blank"
             rel="nofollow noopener sponsored"
-            className="flex items-start gap-2 group py-2 border-b border-border last:border-0"
+            className="flex items-start gap-2 group py-2 border-b border-border last:border-0 transition-all duration-200 hover:pl-1"
           >
-            <Newspaper className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-            <span className="text-sm text-foreground group-hover:text-[#1a2744] dark:group-hover:text-white/80 line-clamp-2 leading-snug transition-colors">
+            <Newspaper className="w-4 h-4 text-muted-foreground group-hover:text-[#1a2744] dark:group-hover:text-blue-400 mt-0.5 flex-shrink-0 transition-colors duration-200" />
+            <span className="text-sm text-foreground group-hover:text-[#1a2744] dark:group-hover:text-white line-clamp-2 leading-snug transition-colors duration-200 relative">
               {article.title}
+              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#1a2744] dark:bg-blue-400 group-hover:w-full transition-all duration-300" />
             </span>
           </a>
         ))}

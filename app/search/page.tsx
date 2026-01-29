@@ -14,7 +14,7 @@ export default function SearchPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const query = searchParams.get('q') || ''
-  
+
   const [searchQuery, setSearchQuery] = React.useState(query)
   const [results, setResults] = React.useState<NewsArticle[]>([])
   const [isLoading, setIsLoading] = React.useState(false)
@@ -56,14 +56,14 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       <Header />
-      
+
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
           Search News
         </h1>
-        
+
         {/* Search Form */}
         <form onSubmit={handleSearch} className="mb-8">
           <div className="relative max-w-2xl">
@@ -97,7 +97,7 @@ export default function SearchPage() {
               <p className="text-muted-foreground mb-6">
                 {results.length} {results.length === 1 ? 'result' : 'results'} for &ldquo;{query}&rdquo;
               </p>
-              
+
               {results.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {results.map((article) => (
@@ -125,7 +125,7 @@ export default function SearchPage() {
           )}
         </Suspense>
       </main>
-      
+
       <Footer />
     </div>
   )

@@ -2,6 +2,8 @@ import React from "react"
 import type { Metadata, Viewport } from 'next'
 import { Geist, Lora } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { SplashScreen } from '@/components/splash-screen'
+import { StickyBottomAd } from '@/components/sticky-bottom-ad'
 import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
@@ -99,8 +101,13 @@ export const viewport: Viewport = {
   userScalable: true,
 }
 
-function OrganizationSchema() {
-  const schema = {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  // Define schemas as constants to ensure consistent serialization
+  const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'globex.news',
@@ -114,16 +121,7 @@ function OrganizationSchema() {
     },
   }
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  )
-}
-
-function WebSiteSchema() {
-  const schema = {
+  const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'globex.news',
@@ -136,25 +134,26 @@ function WebSiteSchema() {
   }
 
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  )
-}
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
-  return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <OrganizationSchema />
-        <WebSiteSchema />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+          suppressHydrationWarning
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+          suppressHydrationWarning
+        />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXX"
+          crossOrigin="anonymous"
+        ></script>
       </head>
       <body className={`${geist.className} ${lora.variable} font-sans antialiased`}>
+        <SplashScreen />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -164,6 +163,7 @@ export default function RootLayout({
           {children}
           <Analytics />
         </ThemeProvider>
+        <StickyBottomAd />
       </body>
     </html>
   )

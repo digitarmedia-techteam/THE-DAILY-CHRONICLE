@@ -1,6 +1,5 @@
-import { MediaRenderer } from '@/components/article-card'
+import { ArticleCard } from '@/components/article-card'
 import type { NewsArticle } from '@/lib/types'
-import { formatDistanceToNow } from '@/lib/date-utils'
 
 interface LatestNewsSidebarProps {
   articles: NewsArticle[]
@@ -9,39 +8,17 @@ interface LatestNewsSidebarProps {
 export function LatestNewsSidebar({ articles }: LatestNewsSidebarProps) {
   return (
     <div>
-      <h3 className="font-bold text-sm uppercase text-muted-foreground mb-4 tracking-wide">
-        Latest News
-      </h3>
-      <div className="space-y-4">
+      <div className="flex items-center gap-2 mb-6">
+        <span className="w-1 h-5 bg-blue-600 rounded-full" />
+        <h3 className="font-black text-xs uppercase text-foreground tracking-[0.2em]">
+          Latest Stream
+        </h3>
+      </div>
+      <div className="space-y-6">
         {articles.slice(0, 30).map((article) => (
-          <a
-            key={article.id}
-            href={article.link}
-            target="_blank"
-            rel="nofollow noopener sponsored"
-            className="flex gap-3 group pb-4 border-b border-border last:border-0"
-          >
-            <div className="w-16 h-16 flex-shrink-0">
-              <MediaRenderer
-                image={article.image}
-                video={article.video}
-                title={article.title}
-                aspectRatio="aspect-square"
-                className="rounded duration-300"
-              />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h4 className="text-sm font-medium text-foreground group-hover:text-[#1a2744] dark:group-hover:text-white/80 line-clamp-2 leading-snug transition-colors">
-                {article.title}
-              </h4>
-              <p className="text-xs text-muted-foreground mt-1">
-                {article.source}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {formatDistanceToNow(article.publishedAt)}
-              </p>
-            </div>
-          </a>
+          <div key={article.id} className="pb-4 border-b border-border/40 last:border-0 last:pb-0 transition-all duration-200 hover:border-border">
+            <ArticleCard article={article} variant="small" />
+          </div>
         ))}
       </div>
     </div>

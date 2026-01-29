@@ -7,6 +7,9 @@ import { usePathname, useRouter } from 'next/navigation'
 import { Search, Moon, Sun, Menu, X, ChevronRight } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { NAV_CATEGORIES } from '@/lib/rss-config'
+import { AdPlacement } from '@/components/ad-placement'
+import { MarketTicker } from '@/components/market-ticker'
+import { BreakingNewsBanner } from '@/components/breaking-news-banner'
 import { cn } from '@/lib/utils'
 import { useTheme } from 'next-themes'
 
@@ -53,20 +56,32 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-[#1a2744] text-white">
+    <header className="sticky top-0 z-50 bg-[#1a2744] text-white transition-all duration-300 shadow-xl">
+      <MarketTicker />
       {/* Top bar with logo */}
       <div className="border-b border-white/10 bg-[#1a2744] relative z-50">
-        <div className="container max-w-[1600px] mx-auto px-4 py-3 md:py-6 flex items-center justify-between gap-4 md:gap-8">
-          <Link href="/" className="flex items-center gap-2 text-xl sm:text-2xl md:text-3xl font-bold tracking-tight flex-shrink-0">
-            <img src="/icon.svg" alt="Globex News Logo" className="w-8 h-8 md:w-10 md:h-10" />
+        <div className="container max-w-[1600px] mx-auto px-8 py-1 md:py-1.5 flex items-center justify-between gap-4 md:gap-8">
+          <Link href="/" className="flex items-center gap-2 text-lg sm:text-xl md:text-xl font-bold tracking-tight flex-shrink-0">
+            <img src="/icon.svg" alt="Globex News Logo" className="w-8 h-8 md:w-8 md:h-8" />
             <div>
               <span className="text-white">globex</span>
               <span className="text-blue-400">.news</span>
             </div>
           </Link>
+
+          {/* Desktop Header Ad Placement */}
+          <div className="hidden lg:block flex-1 max-w-[728px] max-h-[40px] mx-auto overflow-hidden">
+            <AdPlacement
+              slot="header-leaderboard"
+              format="horizontal"
+              label=""
+              className="my-0 min-h-[40px]"
+            />
+          </div>
+
           <div className="flex items-center gap-3 md:gap-4">
             <span className="hidden lg:inline text-xs font-bold text-white/50 tracking-widest">
-              LATEST UPDATES • BBC NETWORK
+
             </span>
             <button
               onClick={() => setSearchOpen(!searchOpen)}
@@ -77,7 +92,7 @@ export function Header() {
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 hover:bg-white/10 rounded-full transition-colors"
+              className="lg:hidden p-1.5 hover:bg-white/10 rounded-full transition-colors"
               aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -87,7 +102,7 @@ export function Header() {
 
         {/* Search bar (expandable) */}
         {searchOpen && (
-          <div className="container max-w-[1600px] mx-auto px-4 pb-4">
+          <div className="container max-w-[1600px] mx-auto px-4 pb-3">
             <form onSubmit={handleSearch}>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
@@ -97,11 +112,11 @@ export function Header() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search news..."
-                  className="w-full pl-10 pr-20 py-2.5 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 text-sm md:text-base"
+                  className="w-full pl-10 pr-20 py-1.5 bg-white/10 border border-white/20 rounded text-white placeholder:text-white/50 focus:outline-none focus:ring-1 focus:ring-white/30 text-sm md:text-base outline-none"
                 />
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-white text-[#1a2744] rounded text-xs sm:text-sm font-medium hover:bg-white/90 transition-colors"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 px-2 py-1 bg-white text-[#1a2744] rounded text-xs font-medium hover:bg-white/90 transition-colors"
                 >
                   Search
                 </button>
@@ -112,7 +127,7 @@ export function Header() {
       </div>
 
       {/* Navigation */}
-      <nav className="bg-[#1a2744] shadow-lg">
+      <nav className="bg-[#1a2744] shadow-lg border-b border-white/5">
         <div className="container max-w-[1600px] mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Desktop nav */}
@@ -125,7 +140,7 @@ export function Header() {
                     <Link
                       href={href}
                       className={cn(
-                        'block px-3 xl:px-4 py-3 text-xs xl:text-sm font-bold uppercase tracking-wide transition-colors whitespace-nowrap',
+                        'block px-3 xl:px-4 py-1.5 text-xs xl:text-[11px] font-black uppercase tracking-widest transition-colors whitespace-nowrap',
                         isActive
                           ? 'bg-white/10 text-white'
                           : 'text-white/80 hover:bg-white/5 hover:text-white'
@@ -209,6 +224,10 @@ export function Header() {
                     )
                   })}
                 </ul>
+
+                <div className="mt-10">
+                  <AdPlacement slot="mobile-menu-bottom" label="Sponsored" className="my-0" />
+                </div>
               </div>
 
               <div className="p-8 border-t border-white/10 bg-black/10">
@@ -226,13 +245,14 @@ export function Header() {
                   <span className="text-xs font-bold opacity-40 uppercase tracking-widest">{isDark ? 'Dark' : 'Light'}</span>
                 </button>
                 <p className="mt-8 text-center text-white/20 text-[10px] uppercase font-bold tracking-widest">
-                  © 2026 Globex BBC Network
+                  © 2026 Globex.news
                 </p>
               </div>
             </div>
           )}
         </div>
       </nav>
+      <BreakingNewsBanner />
     </header>
   )
 }

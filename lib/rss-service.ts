@@ -229,13 +229,44 @@ export async function fetchAllNews(): Promise<NewsArticle[]> {
 }
 
 export async function searchNews(query: string): Promise<NewsArticle[]> {
-  const homeFeeds = RSS_FEEDS.filter(feed => feed.category === 'home').slice(0, 2)
-  const results = await Promise.all(homeFeeds.map(parseFeed))
+  // Search across all feeds for comprehensive results
+  const allFeeds = RSS_FEEDS.slice(0, 10) // Search top 10 feeds for performance
+  const results = await Promise.all(allFeeds.map(parseFeed))
   const allNews = results.flat()
 
-  const searchTerms = query.toLowerCase().split(' ')
-  return allNews.filter(article => {
-    const searchText = `${article.title} ${article.description} ${article.source}`.toLowerCase()
-    return searchTerms.some(term => searchText.includes(term))
-  }).sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
+  const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 2) // Ignore terms shorter than 3 chars
+
+  // Score each article for relevance
+  const scoredArticles = allNews.map(article => {
+    let score = 0
+    const title = article.title.toLowerCase()
+    const description = (article.description || '').toLowerCase()
+    const source = article.source.toLowerCase()
+    const category = article.category.toLowerCase()
+
+    searchTerms.forEach(term => {
+      // Title matches are most important
+      if (title.includes(term)) score += 10
+      // Exact word match in title is even better
+      if (title.split(' ').includes(term)) score += 5
+      // Description matches
+      if (description.includes(term)) score += 3
+      // Source matches
+      if (source.includes(term)) score += 2
+      // Category matches
+      if (category.includes(term)) score += 1
+    })
+
+    return { article, score }
+  })
+
+  // Filter articles with score > 0 and sort by score then date
+  return scoredArticles
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => {
+      if (a.score !== b.score) return b.score - a.score
+      return b.article.publishedAt.getTime() - a.article.publishedAt.getTime()
+    })
+    .map(({ article }) => article)
+    .slice(0, 50) // Return top 50 results
 }
