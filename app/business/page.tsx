@@ -1,18 +1,19 @@
-import type { Metadata } from 'next'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
-import { MarketOverview } from '@/components/market-overview'
-import { MarketTicker } from '@/components/market-ticker'
-import { BreakingNewsBanner } from '@/components/breaking-news-banner'
-import { CategoryContent } from '@/components/category-page'
-import { CompanyNewsSection } from '@/components/company-news-section'
-import { Suspense } from 'react'
-import { Skeleton } from '@/components/ui/skeleton'
+import type { Metadata } from "next";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
+import { MarketOverview } from "@/components/market-overview";
+import { MarketTicker } from "@/components/market-ticker";
+import { BreakingNewsBanner } from "@/components/breaking-news-banner";
+import { CategoryContent } from "@/components/category-page";
+import { CompanyNewsSection } from "@/components/company-news-section";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata: Metadata = {
-  title: 'Business News - globex.news',
-  description: 'Latest business news, gold prices, silver prices, and financial analysis.',
-}
+  title: "Business News - globex.news",
+  description:
+    "Latest business news, gold prices, silver prices, and financial analysis.",
+};
 
 function MarketDataSkeleton() {
   return (
@@ -21,7 +22,7 @@ function MarketDataSkeleton() {
         <Skeleton key={i} className="h-24 w-full rounded-xl" />
       ))}
     </div>
-  )
+  );
 }
 
 function NewsSkeleton() {
@@ -34,15 +35,15 @@ function NewsSkeleton() {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export default function BusinessPage() {
   return (
     <div className="min-h-screen bg-background pb-20">
       <Header />
-      <MarketTicker />
-      <BreakingNewsBanner />
+      {/* <MarketTicker />
+      <BreakingNewsBanner /> */}
 
       <div className="container mx-auto px-4 pt-8">
         <div className="mb-4">
@@ -61,12 +62,18 @@ export default function BusinessPage() {
         <CompanyNewsSection symbol="AAPL" />
       </div>
 
-      <Suspense fallback={<div className="container mx-auto px-4 py-8"><NewsSkeleton /></div>}>
+      <Suspense
+        fallback={
+          <div className="container mx-auto px-4 py-8">
+            <NewsSkeleton />
+          </div>
+        }
+      >
         {/* @ts-ignore */}
         <CategoryContent category="business" />
       </Suspense>
 
       <Footer />
     </div>
-  )
+  );
 }
