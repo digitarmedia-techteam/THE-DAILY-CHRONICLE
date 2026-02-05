@@ -13,7 +13,7 @@ export function MarketTicker() {
             setData(result)
         }
         loadData()
-        const interval = setInterval(loadData, 10000) // Update every 10s for real-time feel
+        const interval = setInterval(loadData, 15000) // Update every 15s to respect API rate limits
         return () => clearInterval(interval)
     }, [])
 

@@ -120,7 +120,7 @@ export function AdPlacement({
                     ref={adRef}
                     className="adsbygoogle"
                     style={{ display: 'block', width: '100%', minHeight: '50px' }}
-                    data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" // Placeholder ID
+                    data-ad-client="ca-pub-6835920961299668"
                     data-ad-slot={slot}
                     data-ad-format={format}
                     data-full-width-responsive={responsive ? 'true' : 'false'}

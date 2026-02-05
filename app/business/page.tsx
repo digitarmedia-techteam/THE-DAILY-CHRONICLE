@@ -5,6 +5,7 @@ import { MarketOverview } from '@/components/market-overview'
 import { MarketTicker } from '@/components/market-ticker'
 import { BreakingNewsBanner } from '@/components/breaking-news-banner'
 import { CategoryContent } from '@/components/category-page'
+import { CompanyNewsSection } from '@/components/company-news-section'
 import { Suspense } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -53,6 +54,11 @@ export default function BusinessPage() {
             <MarketOverview />
           </Suspense>
         </div>
+      </div>
+
+      <div className="container mx-auto px-4">
+        {/* @ts-ignore */}
+        <CompanyNewsSection symbol="AAPL" />
       </div>
 
       <Suspense fallback={<div className="container mx-auto px-4 py-8"><NewsSkeleton /></div>}>
