@@ -35,8 +35,14 @@ export async function fetchCompanyNews(symbol: string = 'AAPL'): Promise<Company
         }
 
         const data = await response.json()
-        // Return top 6 latest news items
-        return data.slice(0, 6)
+
+        // Deduplicate by ID to prevent duplicate news items
+        const uniqueNews = Array.from(
+            new Map(data.map((item: CompanyNews) => [item.id, item])).values()
+        ) as CompanyNews[]
+
+        // Return top 6 latest unique news items
+        return uniqueNews.slice(0, 6)
     } catch (error) {
         console.error('Error fetching company news:', error)
         return []

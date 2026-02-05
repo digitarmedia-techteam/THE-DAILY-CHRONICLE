@@ -15,6 +15,11 @@ export async function CompanyNewsSection({ symbol = 'AAPL' }: CompanyNewsSection
         return null
     }
 
+    // Extra safety: deduplicate news items by ID
+    const uniqueNews = Array.from(
+        new Map(news.map(item => [item.id, item])).values()
+    )
+
     return (
         <section className="mb-12 pt-8 border-t border-border">
             <div className="flex items-center justify-between mb-8">
@@ -30,7 +35,7 @@ export async function CompanyNewsSection({ symbol = 'AAPL' }: CompanyNewsSection
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {news.map((item) => (
+                {uniqueNews.map((item) => (
                     <Link
                         href={item.url}
                         key={item.id}
