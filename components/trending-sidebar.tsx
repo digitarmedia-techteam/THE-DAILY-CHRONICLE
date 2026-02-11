@@ -1,16 +1,21 @@
-import Image from 'next/image'
-import type { NewsArticle } from '@/lib/types'
-import { formatDistanceToNow } from '@/lib/date-utils'
-import { ChevronRight } from 'lucide-react'
+import Image from "next/image";
+import type { NewsArticle } from "@/lib/types";
+import { formatDistanceToNow } from "@/lib/date-utils";
+import { ChevronRight } from "lucide-react";
+import { AdPlacement } from "@/components/ad-placement";
 
 interface TrendingSidebarProps {
-  title: string
-  articles: NewsArticle[]
-  variant?: 'default' | 'numbered'
+  title: string;
+  articles: NewsArticle[];
+  variant?: "default" | "numbered";
 }
 
-export function TrendingSidebar({ title, articles, variant = 'default' }: TrendingSidebarProps) {
-  if (variant === 'numbered') {
+export function TrendingSidebar({
+  title,
+  articles,
+  variant = "default",
+}: TrendingSidebarProps) {
+  if (variant === "numbered") {
     return (
       <div className="bg-card rounded-lg border border-border p-4">
         <h3 className="font-bold text-sm uppercase text-muted-foreground mb-4 tracking-wide">
@@ -40,7 +45,7 @@ export function TrendingSidebar({ title, articles, variant = 'default' }: Trendi
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -80,6 +85,9 @@ export function TrendingSidebar({ title, articles, variant = 'default' }: Trendi
           </a>
         ))}
       </div>
+      <div className="mt-6">
+        <AdPlacement slot="4135752050" format="autorelaxed" label="Promoted" />
+      </div>
     </div>
-  )
+  );
 }

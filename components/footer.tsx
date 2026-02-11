@@ -1,12 +1,16 @@
-import Link from 'next/link'
-import { Twitter, Facebook } from 'lucide-react'
-import { AdPlacement } from './ad-placement'
+import Link from "next/link";
+import { Twitter, Facebook } from "lucide-react";
+import { AdPlacement } from "./ad-placement";
 
 export function Footer() {
   return (
     <footer className="bg-card border-t border-border mt-8 md:mt-12 pb-4">
       <div className="container mx-auto px-4 py-6">
-        <AdPlacement slot="footer-top" label="Sponsored Links" className="mt-0 mb-8 max-w-4xl mx-auto" />
+        <AdPlacement
+          slot="1701160406"
+          label="Sponsored Links"
+          className="mt-0 mb-8 max-w-4xl mx-auto"
+        />
         <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between md:gap-4">
           <Link
             href="/about"
@@ -59,8 +63,8 @@ export function Footer() {
 
         <div className="mt-6 pt-4 border-t border-border text-center text-xs text-muted-foreground">
           <p>
-            All content is sourced from public RSS feeds and redirects to original sources.
-            We do not host or reproduce full articles.
+            All content is sourced from public RSS feeds and redirects to
+            original sources. We do not host or reproduce full articles.
           </p>
           <p className="mt-2">
             &copy; {new Date().getFullYear()} globex.news. All rights reserved.
@@ -68,5 +72,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

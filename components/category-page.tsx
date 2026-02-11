@@ -1,14 +1,14 @@
-import { Suspense } from 'react'
-import { unstable_noStore as noStore } from 'next/cache'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
-import { ArticleCard } from '@/components/article-card'
-import { TrendingSidebar } from '@/components/trending-sidebar'
-import { AdPlacement } from '@/components/ad-placement'
-import { fetchNewsByCategory, fetchTrendingNews } from '@/lib/rss-service'
-import { Skeleton } from '@/components/ui/skeleton'
-import type { NewsCategory } from '@/lib/types'
-import { CATEGORY_LABELS } from '@/lib/rss-config'
+import React, { Suspense } from "react";
+import { unstable_noStore as noStore } from "next/cache";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
+import { ArticleCard } from "@/components/article-card";
+import { TrendingSidebar } from "@/components/trending-sidebar";
+import { AdPlacement } from "@/components/ad-placement";
+import { fetchNewsByCategory, fetchTrendingNews } from "@/lib/rss-service";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { NewsCategory } from "@/lib/types";
+import { CATEGORY_LABELS } from "@/lib/rss-config";
 
 function LoadingSkeleton() {
   return (
@@ -24,23 +24,23 @@ function LoadingSkeleton() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 interface CategoryContentProps {
-  category: NewsCategory
+  category: NewsCategory;
 }
 
 export async function CategoryContent({ category }: CategoryContentProps) {
-  noStore() // Ensure fresh data on every request
+  noStore(); // Ensure fresh data on every request
 
   const [articles, trending] = await Promise.all([
     fetchNewsByCategory(category),
     fetchTrendingNews(),
-  ])
+  ]);
 
-  const heroArticle = articles[0]
-  const otherArticles = articles.slice(1)
+  const heroArticle = articles[0];
+  const otherArticles = articles.slice(1);
 
   return (
     <main className="container max-w-[1600px] mx-auto px-4 py-6 md:py-8">
@@ -64,43 +64,78 @@ export async function CategoryContent({ category }: CategoryContentProps) {
             </div>
           )}
 
-          <AdPlacement slot="category-hero-bottom" className="mb-10" />
+          <AdPlacement slot="1701160406" className="mb-10" />
 
           {/* Articles Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {otherArticles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
+            {otherArticles.map((article, index) => (
+              <React.Fragment key={article.id}>
+                <ArticleCard article={article} />
+                {index === 4 && (
+                  <div className="col-span-1 sm:col-span-2 md:col-span-3 py-4">
+                    <AdPlacement
+                      slot="1509588713"
+                      format="fluid"
+                      layout="in-article"
+                      label="Sponsored Story"
+                    />
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
 
-          <AdPlacement slot="category-mobile-footer" label="Recommended" className="lg:hidden mt-8 mb-4" />
+          <AdPlacement
+            slot="1701160406"
+            label="Recommended"
+            className="lg:hidden mt-8 mb-4"
+          />
+
+          <AdPlacement
+            slot="4135752050"
+            format="autorelaxed"
+            label="You May Also Like"
+          />
         </div>
 
         {/* Sidebar - shows below on mobile */}
         <aside className="lg:col-span-3 mt-6 lg:mt-0">
           <div className="sticky top-24 space-y-8 max-h-[calc(100vh-120px)] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-border">
-            <TrendingSidebar title="Trending in Section" articles={trending.slice(0, 10)} />
-            <TrendingSidebar title="Global Top News" articles={trending.slice(10, 20)} variant="numbered" />
+            <TrendingSidebar
+              title="Trending in Section"
+              articles={trending.slice(0, 10)}
+            />
+            <TrendingSidebar
+              title="Global Top News"
+              articles={trending.slice(10, 20)}
+              variant="numbered"
+            />
           </div>
         </aside>
       </div>
     </main>
-  )
+  );
 }
 
 interface CategoryPageProps {
-  category: NewsCategory
+  category: NewsCategory;
 }
 
 export function CategoryPage({ category }: CategoryPageProps) {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <Suspense fallback={<div className="container mx-auto px-4 py-8"><LoadingSkeleton /></div>}>
+      <Suspense
+        fallback={
+          <div className="container mx-auto px-4 py-8">
+            <LoadingSkeleton />
+          </div>
+        }
+      >
         {/* @ts-ignore */}
         <CategoryContent category={category} />
       </Suspense>
       <Footer />
     </div>
-  )
+  );
 }

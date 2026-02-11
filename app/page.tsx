@@ -1,14 +1,14 @@
-import { Suspense } from 'react'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
-import { ArticleCard } from '@/components/article-card'
-import { LatestNewsSidebar } from '@/components/latest-news-sidebar'
-import { TopStories } from '@/components/top-stories'
-import { TrendingSidebar } from '@/components/trending-sidebar'
-import { FeaturedArticles } from '@/components/featured-articles'
-import { AdPlacement } from '@/components/ad-placement'
-import { fetchHomePageData } from '@/lib/rss-service'
-import { Skeleton } from '@/components/ui/skeleton'
+import React, { Suspense } from "react";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
+import { ArticleCard } from "@/components/article-card";
+import { LatestNewsSidebar } from "@/components/latest-news-sidebar";
+import { TopStories } from "@/components/top-stories";
+import { TrendingSidebar } from "@/components/trending-sidebar";
+import { FeaturedArticles } from "@/components/featured-articles";
+import { AdPlacement } from "@/components/ad-placement";
+import { fetchHomePageData } from "@/lib/rss-service";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function LoadingSkeleton() {
   return (
@@ -47,11 +47,11 @@ function LoadingSkeleton() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 async function HomeContent() {
-  const data = await fetchHomePageData()
+  const data = await fetchHomePageData();
 
   const {
     heroArticle,
@@ -60,10 +60,10 @@ async function HomeContent() {
     featuredArticles,
     trending,
     moreStories,
-  } = data
+  } = data;
 
-  const trendingOpinion = trending.slice(0, 5)
-  const trendingNow = trending.slice(5, 10)
+  const trendingOpinion = trending.slice(0, 5);
+  const trendingNow = trending.slice(5, 10);
 
   return (
     <>
@@ -91,17 +91,24 @@ async function HomeContent() {
               </p>
             </section>
 
-            <AdPlacement slot="home-hero-bottom" className="my-6" />
+            <AdPlacement slot="1701160406" className="my-6" />
 
             {/* Injected Content to fill middle space */}
             <section className="pt-8 border-t border-border">
               <div className="flex items-center gap-2 mb-6">
                 <span className="w-1.5 h-6 bg-red-600 rounded-full" />
-                <h2 className="text-xl font-black uppercase tracking-tighter">Editor's Picks</h2>
+                <h2 className="text-xl font-black uppercase tracking-tighter">
+                  Editor's Picks
+                </h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {moreStories.slice(0, 4).map((article) => (
-                  <ArticleCard key={article.id} article={article} variant="horizontal" showCategory />
+                  <ArticleCard
+                    key={article.id}
+                    article={article}
+                    variant="horizontal"
+                    showCategory
+                  />
                 ))}
               </div>
             </section>
@@ -111,7 +118,11 @@ async function HomeContent() {
           <div className="lg:hidden md:col-span-1 order-2 space-y-8">
             <div className="md:hidden">
               <LatestNewsSidebar articles={latestNews.slice(0, 5)} />
-              <AdPlacement slot="mobile-infeed-1" label="Promoted" className="my-6" />
+              <AdPlacement
+                slot="1701160406"
+                label="Promoted"
+                className="my-6"
+              />
             </div>
             <TopStories articles={topStories.slice(0, 8)} />
           </div>
@@ -120,9 +131,16 @@ async function HomeContent() {
           <aside className="hidden lg:block lg:col-span-3 order-3">
             <div className="sticky top-24 space-y-8 max-h-[calc(100vh-120px)] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-border">
               <TopStories articles={topStories} />
-              <AdPlacement slot="sidebar-top" label="Sponsored" />
-              <TrendingSidebar title="Politics & UK" articles={trendingOpinion} />
-              <TrendingSidebar title="Trending Now" articles={trendingNow} variant="numbered" />
+              <AdPlacement slot="1701160406" label="Sponsored" />
+              <TrendingSidebar
+                title="Politics & UK"
+                articles={trendingOpinion}
+              />
+              <TrendingSidebar
+                title="Trending Now"
+                articles={trendingNow}
+                variant="numbered"
+              />
             </div>
           </aside>
         </div>
@@ -131,36 +149,64 @@ async function HomeContent() {
         <section className="mt-12 pt-8 border-t border-border">
           <div className="flex items-center gap-2 mb-8">
             <span className="w-1.5 h-6 bg-[#1a2744] dark:bg-blue-500 rounded-full" />
-            <h2 className="text-2xl font-black uppercase tracking-tighter">World Perspective</h2>
+            <h2 className="text-2xl font-black uppercase tracking-tighter">
+              World Perspective
+            </h2>
           </div>
           <FeaturedArticles articles={featuredArticles} />
         </section>
 
-        <AdPlacement slot="home-middle" className="my-12 px-4 border-y border-border/50 py-4" />
+        <AdPlacement
+          slot="1701160406"
+          className="my-12 px-4 border-y border-border/50 py-4"
+        />
 
         <section className="mt-12 pt-8 border-t border-border">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-9">
               <div className="flex items-center gap-2 mb-8">
                 <span className="w-1.5 h-6 bg-[#183a37] dark:bg-emerald-500 rounded-full" />
-                <h2 className="text-2xl font-black uppercase tracking-tighter">Business & Innovation</h2>
+                <h2 className="text-2xl font-black uppercase tracking-tighter">
+                  Business & Innovation
+                </h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {moreStories.slice(4, 13).map((article) => (
-                  <ArticleCard key={article.id} article={article} showCategory />
+                {moreStories.slice(4, 13).map((article, index) => (
+                  <React.Fragment key={article.id}>
+                    <ArticleCard article={article} showCategory />
+                    {index === 2 && (
+                      <div className="col-span-full py-6">
+                        <AdPlacement
+                          slot="1509588713"
+                          format="fluid"
+                          layout="in-article"
+                          label="Sponsored Content"
+                        />
+                      </div>
+                    )}
+                  </React.Fragment>
                 ))}
               </div>
             </div>
             <aside className="lg:col-span-3 hidden lg:block">
               <div className="sticky top-24">
-                <TrendingSidebar title="In Depth" articles={trending.slice(10, 15)} />
+                <TrendingSidebar
+                  title="In Depth"
+                  articles={trending.slice(10, 15)}
+                />
               </div>
             </aside>
           </div>
         </section>
+        <AdPlacement
+          slot="4135752050"
+          format="autorelaxed"
+          label="You May Also Like"
+          className="my-12"
+        />
       </main>
     </>
-  )
+  );
 }
 
 export default function HomePage() {
@@ -173,5 +219,5 @@ export default function HomePage() {
       </Suspense>
       <Footer />
     </div>
-  )
+  );
 }
