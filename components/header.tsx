@@ -77,14 +77,14 @@ export function Header() {
           </Link>
 
           {/* Desktop Header Ad Placement */}
-          <div className="hidden lg:block flex-1 max-w-[728px] max-h-[40px] mx-auto overflow-hidden">
+          {/* <div className="hidden lg:block flex-1 max-w-[728px] max-h-[40px] mx-auto overflow-hidden">
             <AdPlacement
               slot="header-leaderboard"
               format="horizontal"
               label=""
               className="my-0 min-h-[40px]"
             />
-          </div>
+          </div> */}
 
           <div className="flex items-center gap-3 md:gap-4">
             <span className="hidden lg:inline text-xs font-bold text-white/50 tracking-widest"></span>
